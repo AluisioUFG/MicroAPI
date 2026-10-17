@@ -8,7 +8,7 @@ import pytest
 
 from app.models.task import TaskCreate, TaskUpdate
 from app.repositories.task_repository import TaskRepository
-from app.services.priority_advisor import Priority
+from app.services.priority_advisor import Priority, PriorityAdvisor
 from app.services.task_service import TaskService
 
 
