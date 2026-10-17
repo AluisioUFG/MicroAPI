@@ -9,6 +9,26 @@ from app.repositories.task_repository import TaskRepository
 from app.services.priority_advisor import Priority, PriorityAdvisor
 
 
+class _PrioritySuggestionTracker:
+    """Keeps priority suggestions synchronized with task changes."""
+
+    def __init__(self, advisor: PriorityAdvisor) -> None:
+        self._advisor = advisor
+        self._suggestions: dict[UUID, Priority] = {}
+
+    def refresh(self, task: TaskOut) -> None:
+        self._suggestions[task.id] = self._advisor.suggest(
+            task.title,
+            task.description,
+        )
+
+    def remove(self, task_id: UUID) -> None:
+        self._suggestions.pop(task_id, None)
+
+    def get(self, task_id: UUID) -> Priority | None:
+        return self._suggestions.get(task_id)
+
+
 class TaskService:
     """Coordinates task persistence and priority suggestions."""
 
@@ -19,15 +39,12 @@ class TaskService:
     ) -> None:
         """Initialize the service dependencies."""
         self._repository = repository
-        self._priority_advisor = priority_advisor
-        self._priority_suggestions: dict[UUID, Priority] = {}
+        self._priority_tracker = _PrioritySuggestionTracker(priority_advisor)
 
     def create(self, task: TaskCreate) -> TaskOut:
         """Create a task and calculate its priority suggestion."""
         created_task = self._repository.create(task)
-        self._priority_suggestions[created_task.id] = self._suggest_priority(
-            created_task,
-        )
+        self._priority_tracker.refresh(created_task)
         return created_task
 
     def list(self) -> list[TaskOut]:
@@ -44,20 +61,16 @@ class TaskService:
         if updated_task is None:
             return None
 
-        self._priority_suggestions[task_id] = self._suggest_priority(updated_task)
+        self._priority_tracker.refresh(updated_task)
         return updated_task
 
     def delete(self, task_id: UUID) -> bool:
         """Delete a task and its associated suggestion."""
         was_deleted = self._repository.delete(task_id)
         if was_deleted:
-            self._priority_suggestions.pop(task_id, None)
+            self._priority_tracker.remove(task_id)
         return was_deleted
 
     def get_suggested_priority(self, task_id: UUID) -> Priority | None:
         """Return the current priority suggestion for a task."""
-        return self._priority_suggestions.get(task_id)
-
-    def _suggest_priority(self, task: TaskOut) -> Priority:
-        """Delegate priority calculation to the advisor."""
-        return self._priority_advisor.suggest(task.title, task.description)
+        return self._priority_tracker.get(task_id)

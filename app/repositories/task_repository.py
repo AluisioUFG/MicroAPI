@@ -48,8 +48,4 @@ class TaskRepository:
 
     def delete(self, task_id: UUID) -> bool:
         """Delete a task and report whether it existed."""
-        if task_id not in self._tasks:
-            return False
-
-        del self._tasks[task_id]
-        return True
+        return self._tasks.pop(task_id, None) is not None
