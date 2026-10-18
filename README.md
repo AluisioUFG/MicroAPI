@@ -8,6 +8,15 @@ API REST para criar, consultar, atualizar e remover tarefas. O MVP usa FastAPI, 
 - `pip`
 - Uma chave da OpenAI somente se quiser habilitar a sugestão remota de prioridade
 
+## Tecnologias
+
+- Python 3.12
+- FastAPI e Pydantic para a API e validação dos dados
+- Uvicorn para execução do servidor ASGI
+- Pytest para testes automatizados
+- OpenAI SDK opcional para sugestões remotas de prioridade
+- Persistência atual em memória
+
 ## Instalação
 
 Na raiz do projeto, crie e ative um ambiente virtual.
@@ -227,8 +236,8 @@ A integração com a OpenAI é opcional. Para ativá-la:
 
 ## Próximos passos
 
-- Adicionar persistência durável e migrações.
+- Migrar a persistência em memória para MySQL e adicionar migrações.
 - Definir autenticação, autorização e isolamento dos dados por usuário.
 - Expor a sugestão de prioridade em um contrato de API, caso faça parte do escopo futuro.
-- Expandir testes para health check, validações e cenários adicionais de erro.
-- Preparar configuração de produção, observabilidade e pipeline de integração contínua.
+- Ampliar os testes de falhas do provedor OpenAI, incluindo timeout e respostas inválidas.
+- Preparar implantação de produção, observabilidade operacional e pipeline de integração contínua.
