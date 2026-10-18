@@ -57,6 +57,12 @@ python -m pytest
 
 Os testes cobrem as regras do serviço, a heurística e o fallback de prioridade, e os principais fluxos HTTP. Os testes de rota usam um repositório novo por teste e não dependem de chamadas externas à OpenAI.
 
+## Como a IA Acelerou Este Projeto
+
+OpenAI Codex e GitHub Copilot foram usados em todas as fases do ciclo de vida do software (SDLC), desde a geração do boilerplate e o apoio a comandos de ambiente e Git até sugestões de arquitetura e refatorações. O maior ganho foi na documentação e na criação de testes. As sugestões, porém, exigiram revisão e validação humanas.
+
+Os modelos locais não tiveram qualidade ou velocidade satisfatórias. Durante a troca de agente ou provider, houve casos de dependências instaladas fora do ambiente virtual e de instruções de formatação, como finais de linha, ignoradas. No início, também houve dificuldade para gerar artefatos e acesso inesperado a áreas do perfil do usuário, levantando preocupações sobre o alcance das permissões concedidas aos agentes.
+
 ## Uso da API
 
 Todas as operações usam JSON, exceto `DELETE`, que retorna corpo vazio. Exemplos abaixo usam `curl`.
