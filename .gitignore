@@ -12,6 +12,7 @@ dist/
 venv/
 env/
 ENV/
+.env
 
 # Cache e relatórios de testes
 .pytest_cache/
