@@ -26,3 +26,6 @@ htmlcov/
 .vscode/
 .idea/
 *.code-workspace
+
+# Roteiro de apresentação local
+docs/roteiro_demo_mvp_5min.md
