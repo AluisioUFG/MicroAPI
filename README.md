@@ -2,6 +2,8 @@
 
 API REST para criar, consultar, atualizar e remover tarefas. O MVP usa FastAPI, validação com Pydantic, persistência em memória e sugestão assistida de prioridade por heurística local ou, opcionalmente, por um modelo da OpenAI.
 
+Versão estável: [v1.0.0](https://github.com/AluisioUFG/MicroAPI/releases/tag/v1.0.0).
+
 ## Requisitos
 
 - Python 3.12

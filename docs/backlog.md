@@ -94,10 +94,10 @@
     - [x] A sugestão interna de prioridade e a integração OpenAI opcional estão delimitadas no escopo.
     - [x] O documento `docs/escopo-mvp.md` está alinhado ao comportamento entregue.
 
-- [ ] **RT08 — Publicação da versão MVP**
+- [x] **RT08 — Publicação da versão MVP**
   - Critérios de aceite:
-    - [ ] Código da branch `main` está enviado ao repositório remoto.
+    - [x] Código da branch `main` está enviado ao repositório remoto.
     - [x] Dependências base estão registradas em `requirements.txt`.
     - [x] A instalação limpa e a inicialização com `python -m uvicorn app.main:app --reload` foram verificadas.
     - [x] Metadados de versão estão atualizados para `1.0.0`.
-    - [ ] Tag `v1.0.0` e release do GitHub foram criadas.
+    - [x] Tag `v1.0.0` e release do GitHub foram criadas.
