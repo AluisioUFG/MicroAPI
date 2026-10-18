@@ -98,6 +98,6 @@
   - Critérios de aceite:
     - [ ] Código da branch `main` está enviado ao repositório remoto.
     - [x] Dependências base estão registradas em `requirements.txt`.
-    - [ ] A instalação limpa e a inicialização com `python -m uvicorn app.main:app --reload` foram verificadas.
+    - [x] A instalação limpa e a inicialização com `python -m uvicorn app.main:app --reload` foram verificadas.
     - [x] Metadados de versão estão atualizados para `1.0.0`.
     - [ ] Tag `v1.0.0` e release do GitHub foram criadas.

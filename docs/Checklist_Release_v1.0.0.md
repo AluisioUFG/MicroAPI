@@ -11,8 +11,8 @@
 - [x] Testes cobrem `GET /health`, limites de título, UUID inválido e respostas `422`.
 - [x] Teste confirma que erros `500` não expõem detalhes internos e são registrados.
 - [x] A aplicação registra log de inicialização.
-- [ ] Criar ambiente virtual limpo, instalar `requirements.txt`, executar testes e iniciar a API.
-- [ ] Fazer smoke test de `/health`, CRUD, `/docs` e `/openapi.json` com a API em execução.
+- [x] Criar ambiente virtual limpo, instalar `requirements.txt`, executar os 21 testes e iniciar a API.
+- [x] Fazer smoke test de `/health` e CRUD com Uvicorn; verificar `/docs` e `/openapi.json` no ambiente limpo.
 - [ ] Validar em cada sistema operacional que o README declara suportar (Windows, Linux e macOS), ou restringir o suporte documentado.
 - [ ] Validar o caminho opcional da OpenAI com a versão `openai==3.35.1`, sem registrar ou expor credenciais.
 - [ ] Revisar dependências e riscos de segurança antes de publicar.
