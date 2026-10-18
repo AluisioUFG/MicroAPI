@@ -1,3 +1,5 @@
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 import logging
 
@@ -12,7 +14,13 @@ from app.api.task_routes import router as task_router
 logger = logging.getLogger(__name__)
 
 
-app = FastAPI(title="Micro API de Gestão de Tarefas")
+@asynccontextmanager
+async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    logger.info("Application startup")
+    yield
+
+
+app = FastAPI(title="Micro API de Gestão de Tarefas", lifespan=lifespan)
 app.include_router(task_router)
 
 
@@ -23,7 +31,7 @@ async def validation_exception_handler(
 ) -> JSONResponse:
     """Return validation errors in a consistent JSON format."""
     return JSONResponse(
-        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
         content={
             "detail": "Validation failed.",
             "errors": jsonable_encoder(exception.errors()),

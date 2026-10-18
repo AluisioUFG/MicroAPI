@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ufg-microapi"
-version = "0.1.0"
+version = "1.0.0"
 description = "API REST para gestão de tarefas"
 readme = "README.md"
 package-mode = false

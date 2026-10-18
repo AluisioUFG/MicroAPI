@@ -2,23 +2,21 @@
 
 ## Execução
 
-- **Data:** 17/10/2026
-- **Início:** 17:55:28 (UTC-03:00)
-- **Término:** 17:55:30 (UTC-03:00)
+- **Data:** 18/10/2026
 - **Comando:** `python -m pytest`
 - **Ambiente:** Windows, Python 3.12.0, pytest 9.1.1
-- **Duração reportada pelo pytest:** 0,75 s
+- **Duração reportada pelo pytest:** 0,62 s
 
 ## Resultado
 
-**Sucesso.** Foram coletados e executados 15 testes: **15 passaram, 0 falharam**. O processo terminou com código de saída `0`.
+**Sucesso.** Foram coletados e executados 21 testes: **21 passaram, 0 falharam**. O processo terminou com código de saída `0`.
 
 | Arquivo | Resultado |
 | --- | ---: |
 | `tests/test_priority_advisor.py` | 4 passaram |
-| `tests/test_task_routes.py` | 6 passaram |
+| `tests/test_task_routes.py` | 12 passaram |
 | `tests/test_task_service.py` | 5 passaram |
-| **Total** | **15 passaram** |
+| **Total** | **21 passaram** |
 
 Não foram observadas falhas que exijam correção imediata nesta execução.
 
@@ -26,11 +24,9 @@ Não foram observadas falhas que exijam correção imediata nesta execução.
 
 As sugestões abaixo ampliam a cobertura; não correspondem a defeitos detectados pela suíte executada.
 
-1. **Health check:** adicionar teste para `GET /health`, validando status `200`, `status: "ok"` e timestamp ISO 8601 em UTC.
-2. **Validação dos contratos HTTP:** testar `422` para título abaixo do mínimo ou acima do máximo e para UUID malformado.
-3. **Tratamento de falhas da OpenAI:** cobrir timeout, erro do provedor, resposta fora dos valores `low`, `medium` e `high`, e ausência do SDK opcional; confirmar o fallback local em cada caso.
-4. **Erro inesperado da API:** testar que uma exceção não tratada retorna `500` sem revelar detalhes internos na resposta.
+1. **Integração OpenAI:** ampliar os testes para timeout, resposta fora dos valores `low`, `medium` e `high`, e ausência do SDK opcional; a chamada real ao provedor não foi executada.
+2. **Instalação limpa:** criar um ambiente virtual novo, instalar `requirements.txt` e validar a inicialização do Uvicorn. Essa verificação não foi concluída nesta execução.
 
 ## Escopo da verificação
 
-A execução valida os testes automatizados existentes. Não inclui análise de cobertura de linhas, testes de carga, integração real com a OpenAI ou verificação de implantação em produção.
+A execução valida a suíte automatizada no ambiente virtual de desenvolvimento. Não inclui instalação limpa, análise de cobertura, testes de carga, integração real com a OpenAI ou verificação de implantação em produção.

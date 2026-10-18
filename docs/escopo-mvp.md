@@ -58,6 +58,10 @@ A API deve:
 
 A API deve disponibilizar a documentação OpenAPI do FastAPI em `/docs`.
 
+## Funcionalidade auxiliar entregue
+
+O `PriorityAdvisor` calcula uma sugestão interna de prioridade durante a criação ou atualização da tarefa. Por padrão, usa uma heurística local; opcionalmente, pode consultar a OpenAI quando o SDK e `OPENAI_API_KEY` estiverem configurados. A sugestão não é persistida nem exposta no contrato público da API, e falhas do provedor não interrompem o fluxo CRUD.
+
 ## Requisitos não funcionais
 
 ### RNF01 — Tecnologia
@@ -99,9 +103,9 @@ A API deve disponibilizar a documentação OpenAPI do FastAPI em `/docs`.
 - Interface web ou aplicativo móvel.
 - Notificações por e-mail, chat ou push.
 - Anexos em tarefas.
-- Comentários, etiquetas, prioridades ou datas de vencimento.
+- Comentários, etiquetas, prioridade como campo público da tarefa ou datas de vencimento.
 - Paginação, filtros avançados e ordenação.
 - Auditoria completa de alterações.
-- Integrações com serviços externos.
+- Integrações externas obrigatórias ou além da consulta opcional à OpenAI descrita acima.
 - Deploy em produção, containerização e pipeline CI/CD.
 - Banco de dados distribuído, cache ou mensageria.

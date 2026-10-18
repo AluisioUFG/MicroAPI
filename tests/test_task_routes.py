@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from collections.abc import Iterator
+from datetime import datetime, timedelta
+import logging
 from uuid import uuid4
 
 import pytest
@@ -41,6 +43,15 @@ def client() -> Iterator[TestClient]:
             app.dependency_overrides.pop(get_task_service, None)
         else:
             app.dependency_overrides[get_task_service] = previous_override
+
+
+def test_health_check_returns_utc_timestamp(client: TestClient) -> None:
+    response = client.get("/health")
+
+    assert response.status_code == 200
+    assert response.json()["status"] == "ok"
+    timestamp = datetime.fromisoformat(response.json()["timestamp"])
+    assert timestamp.utcoffset() == timedelta(0)
 
 
 def test_create_task_returns_201(client: TestClient) -> None:
@@ -100,3 +111,56 @@ def test_missing_task_returns_404(
 
     assert response.status_code == 404
     assert response.json() == {"detail": "Task not found."}
+
+
+@pytest.mark.parametrize("title", ["ab", "x" * 101])
+def test_create_task_rejects_invalid_title(
+    client: TestClient,
+    title: str,
+) -> None:
+    response = client.post("/tasks", json={"title": title})
+
+    assert response.status_code == 422
+    assert response.json()["detail"] == "Validation failed."
+    assert response.json()["errors"]
+
+
+def test_invalid_task_id_returns_422(client: TestClient) -> None:
+    response = client.get("/tasks/not-a-uuid")
+
+    assert response.status_code == 422
+    assert response.json()["detail"] == "Validation failed."
+
+
+def test_unhandled_error_returns_safe_500_and_is_logged(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    def fail_service() -> TaskService:
+        raise RuntimeError("sensitive internal detail")
+
+    previous_override = app.dependency_overrides.get(get_task_service)
+    app.dependency_overrides[get_task_service] = fail_service
+    caplog.set_level(logging.ERROR, logger="app.main")
+
+    try:
+        with TestClient(app, raise_server_exceptions=False) as test_client:
+            response = test_client.get("/tasks")
+    finally:
+        if previous_override is None:
+            app.dependency_overrides.pop(get_task_service, None)
+        else:
+            app.dependency_overrides[get_task_service] = previous_override
+
+    assert response.status_code == 500
+    assert response.json() == {"detail": "Internal server error."}
+    assert "sensitive internal detail" not in response.text
+    assert "sensitive internal detail" in caplog.text
+
+
+def test_application_logs_startup(caplog: pytest.LogCaptureFixture) -> None:
+    caplog.set_level(logging.INFO, logger="app.main")
+
+    with TestClient(app):
+        pass
+
+    assert "Application startup" in caplog.text

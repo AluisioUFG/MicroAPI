@@ -59,13 +59,14 @@
     - [x] Recursos inexistentes retornam `404 Not Found`.
     - [x] Respostas de erro seguem formato JSON consistente.
 
-- [ ] **RT03 — Testes automatizados**
+- [x] **RT03 — Testes automatizados**
   - Critérios de aceite:
     - [x] Existem testes de rota para criar, listar, consultar, atualizar e remover tarefas.
     - [x] Existem testes para recurso inexistente.
-    - [ ] Existe teste para `GET /health`, incluindo status, payload e timestamp UTC.
-    - [ ] Existem testes HTTP para título inválido e UUID malformado (`422`).
-    - [x] Os 15 testes existentes passam localmente (verificação em 18/10/2026).
+    - [x] Existe teste para `GET /health`, incluindo status, payload e timestamp UTC.
+    - [x] Existem testes HTTP para título inválido e UUID malformado (`422`).
+    - [x] Erros inesperados retornam `500` sem expor detalhes e são registrados em log.
+    - [x] Os 21 testes passam localmente (verificação em 18/10/2026).
 
 - [x] **RT04 — Tipagem e organização**
   - Critérios de aceite:
@@ -74,9 +75,9 @@
     - [x] Rotas ficam na camada `api`.
     - [x] Modelos Pydantic ficam na camada `models`.
 
-- [ ] **RT05 — Observabilidade básica**
+- [x] **RT05 — Observabilidade básica**
   - Critérios de aceite:
-    - [ ] A aplicação registra eventos de inicialização.
+    - [x] A aplicação registra eventos de inicialização.
     - [x] Erros inesperados são registrados em log.
 
 ## v1.0 — MVP publicado
@@ -87,16 +88,16 @@
     - [x] Rotas possuem docstrings usadas na documentação OpenAPI.
     - [x] README contém instruções atualizadas para execução local.
 
-- [ ] **RT07 — Revisão de escopo**
+- [x] **RT07 — Revisão de escopo**
   - Critérios de aceite:
-    - [ ] Todos os itens planejados das releases anteriores estão concluídos.
-    - [ ] Revisar a integração OpenAI e a sugestão interna de prioridade, pois o escopo atual lista prioridades e integrações externas como fora de escopo.
-    - [ ] O documento `docs/escopo-mvp.md` está alinhado ao comportamento entregue.
+    - [x] Todos os itens planejados das releases anteriores estão concluídos.
+    - [x] A sugestão interna de prioridade e a integração OpenAI opcional estão delimitadas no escopo.
+    - [x] O documento `docs/escopo-mvp.md` está alinhado ao comportamento entregue.
 
 - [ ] **RT08 — Publicação da versão MVP**
   - Critérios de aceite:
     - [ ] Código da branch `main` está enviado ao repositório remoto.
     - [x] Dependências base estão registradas em `requirements.txt`.
     - [ ] A instalação limpa e a inicialização com `python -m uvicorn app.main:app --reload` foram verificadas.
-    - [ ] Metadados de versão estão atualizados para `1.0.0`.
+    - [x] Metadados de versão estão atualizados para `1.0.0`.
     - [ ] Tag `v1.0.0` e release do GitHub foram criadas.
