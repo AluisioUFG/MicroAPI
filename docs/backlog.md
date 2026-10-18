@@ -53,47 +53,50 @@
 
 ## v0.3 — Persistência e qualidade
 
-- [ ] **RT02 — Validação e tratamento de erros**
+- [x] **RT02 — Validação e tratamento de erros**
   - Critérios de aceite:
-    - [ ] Dados inválidos retornam `422 Unprocessable Entity`.
-    - [ ] Recursos inexistentes retornam `404 Not Found`.
-    - [ ] Respostas de erro seguem formato JSON consistente.
+    - [x] Dados inválidos retornam `422 Unprocessable Entity`.
+    - [x] Recursos inexistentes retornam `404 Not Found`.
+    - [x] Respostas de erro seguem formato JSON consistente.
 
 - [ ] **RT03 — Testes automatizados**
   - Critérios de aceite:
-    - [ ] Existe teste para `GET /health`.
-    - [ ] Existem testes para criar, listar, consultar, atualizar e remover tarefas.
-    - [ ] Existem testes para validação de título e recurso inexistente.
-    - [ ] Todos os testes passam localmente.
+    - [x] Existem testes de rota para criar, listar, consultar, atualizar e remover tarefas.
+    - [x] Existem testes para recurso inexistente.
+    - [ ] Existe teste para `GET /health`, incluindo status, payload e timestamp UTC.
+    - [ ] Existem testes HTTP para título inválido e UUID malformado (`422`).
+    - [x] Os 15 testes existentes passam localmente (verificação em 18/10/2026).
 
-- [ ] **RT04 — Tipagem e organização**
+- [x] **RT04 — Tipagem e organização**
   - Critérios de aceite:
-    - [ ] Funções públicas possuem tipagem estática.
-    - [ ] Regras de negócio ficam na camada `services`.
-    - [ ] Rotas ficam na camada `api`.
-    - [ ] Modelos Pydantic ficam na camada `models`.
+    - [x] Funções públicas possuem tipagem estática.
+    - [x] Regras de negócio ficam na camada `services`.
+    - [x] Rotas ficam na camada `api`.
+    - [x] Modelos Pydantic ficam na camada `models`.
 
 - [ ] **RT05 — Observabilidade básica**
   - Critérios de aceite:
     - [ ] A aplicação registra eventos de inicialização.
-    - [ ] Erros inesperados são registrados em log.
+    - [x] Erros inesperados são registrados em log.
 
 ## v1.0 — MVP publicado
 
-- [ ] **RT06 — Documentação da API**
+- [x] **RT06 — Documentação da API**
   - Critérios de aceite:
-    - [ ] Documentação OpenAPI está disponível em `/docs`.
-    - [ ] Rotas possuem resumo e descrição adequados.
-    - [ ] README contém instruções atualizadas para execução local.
+    - [x] Documentação OpenAPI está disponível em `/docs`.
+    - [x] Rotas possuem docstrings usadas na documentação OpenAPI.
+    - [x] README contém instruções atualizadas para execução local.
 
 - [ ] **RT07 — Revisão de escopo**
   - Critérios de aceite:
     - [ ] Todos os itens planejados das releases anteriores estão concluídos.
-    - [ ] Itens fora de escopo não foram incorporados sem aprovação.
-    - [ ] O documento `docs/escopo-mvp.md` está atualizado.
+    - [ ] Revisar a integração OpenAI e a sugestão interna de prioridade, pois o escopo atual lista prioridades e integrações externas como fora de escopo.
+    - [ ] O documento `docs/escopo-mvp.md` está alinhado ao comportamento entregue.
 
 - [ ] **RT08 — Publicação da versão MVP**
   - Critérios de aceite:
-    - [ ] Código está versionado no repositório remoto.
-    - [ ] Dependências estão registradas em `requirements.txt`.
-    - [ ] A aplicação inicia com `python -m uvicorn app.main:app --reload`.
+    - [ ] Código da branch `main` está enviado ao repositório remoto.
+    - [x] Dependências base estão registradas em `requirements.txt`.
+    - [ ] A instalação limpa e a inicialização com `python -m uvicorn app.main:app --reload` foram verificadas.
+    - [ ] Metadados de versão estão atualizados para `1.0.0`.
+    - [ ] Tag `v1.0.0` e release do GitHub foram criadas.
