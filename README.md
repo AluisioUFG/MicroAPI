@@ -33,6 +33,14 @@ Instale as dependências declaradas pelo projeto:
 python -m pip install -r requirements.txt
 ```
 
+Este fluxo usa `requirements.txt` como referência de instalação. O `pyproject.toml` é uma configuração inicial para Poetry; como ainda não há `poetry.lock`, gere e versione esse arquivo antes de usar Poetry para instalações reproduzíveis.
+
+## Solução de problemas
+
+- Se um módulo não for encontrado, confirme que o ambiente virtual está ativo e que `python -m pip --version` aponta para `.venv`.
+- Se a porta `8000` estiver ocupada, inicie o servidor com `python -m uvicorn app.main:app --reload --port 8001`.
+- A aplicação não carrega `.env` automaticamente. Use `.env.example` como referência e configure as variáveis no ambiente do processo; as variáveis MySQL são placeholders e ainda não são utilizadas.
+
 ## Executar a API
 
 Inicie o servidor de desenvolvimento na raiz do projeto:
@@ -59,13 +67,13 @@ Os testes cobrem as regras do serviço, a heurística e o fallback de prioridade
 
 ## Como a IA Acelerou Este Projeto
 
-OpenAI Codex e GitHub Copilot foram usados em todas as fases do ciclo de vida do software (SDLC), desde a geração do boilerplate e o apoio a comandos de ambiente e Git até sugestões de arquitetura e refatorações. O maior ganho foi na documentação e na criação de testes. As sugestões, porém, exigiram revisão e validação humanas.
+OpenAI Codex e GitHub Copilot foram usados ao longo de todo o ciclo de vida do software (SDLC). Ajudaram a gerar o boilerplate, executar tarefas de configuração do ambiente e Git, explorar opções de arquitetura e realizar refatorações entre arquivos. Os ganhos mais perceptíveis foram na documentação e na geração de testes. A revisão humana foi essencial para avaliar as sugestões, conferir as alterações e validar o comportamento.
 
-Os modelos locais não tiveram qualidade ou velocidade satisfatórias. Durante a troca de agente ou provider, houve casos de dependências instaladas fora do ambiente virtual e de instruções de formatação, como finais de linha, ignoradas. No início, também houve dificuldade para gerar artefatos e acesso inesperado a áreas do perfil do usuário, levantando preocupações sobre o alcance das permissões concedidas aos agentes.
+Na experiência deste projeto, modelos locais tiveram qualidade e velocidade insatisfatórias. Durante uma troca de agente/provider, comandos foram executados fora do ambiente virtual e instruções de formatação, como finais de linha, foram ignoradas. No início, também houve dificuldade para gerar artefatos e acessos a áreas do perfil do usuário além do esperado, o que levantou preocupações sobre o escopo das permissões. Esses casos reforçaram a necessidade de limitar o acesso, conferir os comandos antes de executá-los e revisar as mudanças geradas.
 
 ## Uso da API
 
-Todas as operações usam JSON, exceto `DELETE`, que retorna corpo vazio. Exemplos abaixo usam `curl`.
+Todas as operações usam JSON, exceto `DELETE`, que retorna corpo vazio. Os exemplos com `curl` abaixo usam sintaxe Bash (Linux, macOS ou Git Bash). Para Windows PowerShell, consulte os exemplos equivalentes após o exemplo de criação.
 
 ### Health check
 
@@ -100,6 +108,15 @@ O campo `title` é obrigatório e deve ter entre 3 e 100 caracteres. `descriptio
   "status": false,
   "created_at": "2026-10-17T12:00:00+00:00"
 }
+```
+
+No Windows PowerShell, a verificação de saúde e a criação podem ser feitas assim:
+
+```powershell
+Invoke-RestMethod -Uri "http://127.0.0.1:8000/health"
+
+$body = @{ title = "Revisar documentação"; description = "Atualizar exemplos da API" } | ConvertTo-Json
+Invoke-RestMethod -Uri "http://127.0.0.1:8000/tasks" -Method Post -ContentType "application/json" -Body $body
 ```
 
 ### Listar tarefas
@@ -166,6 +183,8 @@ flowchart LR
 - `app/services/priority_advisor.py`: calcula sugestões localmente e pode consultar a OpenAI.
 - `app/repositories/task_repository.py`: implementa o armazenamento em memória.
 
+O fluxo de uma requisição passa pela rota, que valida o payload com Pydantic e chama o serviço; o serviço aplica as regras e usa o repositório para persistir os dados. Para alterar contratos, comece por `app/models/task.py`; para endpoints, por `app/api/task_routes.py`; para regras, por `app/services/`; e para trocar a persistência, por `app/repositories/`. Atualmente, o repositório mantém os dados somente na memória do processo.
+
 ## Sugestão de prioridade por IA
 
 A prioridade é calculada durante a criação ou atualização da tarefa, mas **não faz parte da resposta da API e não há endpoint público para consultá-la**. Ela é mantida internamente pelo serviço.
@@ -177,7 +196,7 @@ A integração com a OpenAI é opcional. Para ativá-la:
 1. Instale o SDK opcional:
 
    ```bash
-   python -m pip install openai
+  python -m pip install "openai==3.35.1"
    ```
 
 2. Configure a chave no ambiente em que a API será iniciada.
@@ -186,15 +205,17 @@ A integração com a OpenAI é opcional. Para ativá-la:
 
    ```powershell
    $env:OPENAI_API_KEY = "sua-chave"
+  $env:OPENAI_MODEL = "gpt-4.1-mini"
    ```
 
    **Linux ou macOS:**
 
    ```bash
    export OPENAI_API_KEY="sua-chave"
+  export OPENAI_MODEL="gpt-4.1-mini"
    ```
 
-`OPENAI_MODEL` é opcional e, por padrão, usa `gpt-4.1-mini`. A aplicação não carrega arquivos `.env` automaticamente. Se o SDK não estiver instalado, a chave estiver ausente, a chamada falhar ou a resposta não for uma prioridade válida, o sistema usa a heurística local. A chamada externa pode acrescentar latência de até 3 segundos; não é necessário configurar a OpenAI para executar a API ou os testes.
+`OPENAI_MODEL` é opcional e, por padrão, usa `gpt-4.1-mini`. A aplicação não carrega arquivos `.env` automaticamente; configure as variáveis no mesmo ambiente em que o servidor será iniciado. Se o SDK não estiver instalado, a chave estiver ausente, a chamada falhar ou a resposta não for uma prioridade válida, o sistema usa a heurística local. A chamada externa pode acrescentar latência de até 3 segundos; não é necessário configurar a OpenAI para executar a API ou os testes.
 
 ## Limitações
 
